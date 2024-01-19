@@ -1,6 +1,6 @@
 -- lua version 4.0
 
-dofile("./iterations/innerDiameter/20/generatorParams.lua")
+dofile("./iterations/yokeBaseWidth/7/generatorParams.lua")
 -- dofile("iterate.lua")
 
 pi = 3.14159265359
@@ -191,8 +191,8 @@ mi_clearselected()
 -- set current of Rotor circuit
 mi_modifycircprop("Rotor", 1, rotorCurrent)
 
--- save file as ./iterations/innerDiameter/20/template.FEM
-mi_saveas("./iterations/innerDiameter/20/template.FEM")
+-- save file as ./iterations/yokeBaseWidth/7/template.FEM
+mi_saveas("./iterations/yokeBaseWidth/7/template.FEM")
 
 -- close femm window
 quit()
