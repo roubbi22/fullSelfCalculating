@@ -1,0 +1,24 @@
+{
+  "parameters": {
+    "innerDiameter": 14,
+    "outerDiameter": 32,
+    "yokeBaseWidth": 9,
+    "yokeBaseHeight": 17,
+    "yokeUpperWidth": 30,
+    "youkeUpperOuterHeight": 4,
+    "nYokes": 4,
+    "FWWidth": 7,
+    "FWHeight": 14,
+    "padding": 0.2,
+    "rotorTurns": 150,
+    "rotorCurrent": 5,
+    "innerStatorRadius": 44,
+    "airGap": 1
+  },
+  "iterate": {
+    "parameter": "innerDiameter",
+    "beginAt": 10,
+    "endAt": 20,
+    "step": 5
+  }
+}
