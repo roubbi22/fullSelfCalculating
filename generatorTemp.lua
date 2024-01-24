@@ -1,6 +1,6 @@
 -- lua version 4.0
 
-dofile("./iterations/yokeBaseWidth/7/generatorParams.lua")
+dofile("./iterations/outerDiameter/35/generatorParams.lua")
 -- dofile("iterate.lua")
 
 pi = 3.14159265359
@@ -122,23 +122,23 @@ for i = 0, nYokes-1 do
     rp3 = transformPoint2(yokeBaseWidth/2 + padding + FWWidth, yokeBaseY + yokeBaseHeight - padding, 2*i*pi/nYokes)
     rp4 = transformPoint2(yokeBaseWidth/2 + padding, yokeBaseY + yokeBaseHeight - padding, 2*i*pi/nYokes)
 
-    addNodeWithGroup2(rp1, 101)
-    addNodeWithGroup2(rp2, 101)
-    addNodeWithGroup2(rp3, 101)
-    addNodeWithGroup2(rp4, 101)
+    addNodeWithGroup2(rp1, 100)
+    addNodeWithGroup2(rp2, 100)
+    addNodeWithGroup2(rp3, 100)
+    addNodeWithGroup2(rp4, 100)
 
-    addSegmentWithGroup2(rp1, rp2, 101)
-    addSegmentWithGroup2(rp2, rp3, 101)
-    addSegmentWithGroup2(rp3, rp4, 101)
-    addSegmentWithGroup2(rp4, rp1, 101)
+    addSegmentWithGroup2(rp1, rp2, 100)
+    addSegmentWithGroup2(rp2, rp3, 100)
+    addSegmentWithGroup2(rp3, rp4, 100)
+    addSegmentWithGroup2(rp4, rp1, 100)
 
     mi_addblocklabel((rp1[1] + rp3[1])/2, (rp1[2] + rp3[2])/2)
     mi_selectlabel((rp1[1] + rp3[1])/2, (rp1[2] + rp3[2])/2)
     -- if i is even then the windings are positive
     if i == 0 or i == 2 or i == 4 or i == 6 then
-        mi_setblockprop("FW", 1, 0, "Rotor", 0, 101, rotorTurns)
+        mi_setblockprop("FW", 1, 0, "Rotor", 0, 100, rotorTurns)
     else
-        mi_setblockprop("FW", 1, 0, "Rotor", 0, 101, -rotorTurns)
+        mi_setblockprop("FW", 1, 0, "Rotor", 0, 100, -rotorTurns)
     end
     mi_clearselected()
 
@@ -148,23 +148,23 @@ for i = 0, nYokes-1 do
     lp3 = transformPoint2(-yokeBaseWidth/2 - padding - FWWidth, yokeBaseY + yokeBaseHeight - padding, 2*i*pi/nYokes)
     lp4 = transformPoint2(-yokeBaseWidth/2 - padding, yokeBaseY + yokeBaseHeight - padding, 2*i*pi/nYokes)
 
-    addNodeWithGroup2(lp1, 101)
-    addNodeWithGroup2(lp2, 101)
-    addNodeWithGroup2(lp3, 101)
-    addNodeWithGroup2(lp4, 101)
+    addNodeWithGroup2(lp1, 100)
+    addNodeWithGroup2(lp2, 100)
+    addNodeWithGroup2(lp3, 100)
+    addNodeWithGroup2(lp4, 100)
 
-    addSegmentWithGroup2(lp1, lp2, 101)
-    addSegmentWithGroup2(lp2, lp3, 101)
-    addSegmentWithGroup2(lp3, lp4, 101)
-    addSegmentWithGroup2(lp4, lp1, 101)
+    addSegmentWithGroup2(lp1, lp2, 100)
+    addSegmentWithGroup2(lp2, lp3, 100)
+    addSegmentWithGroup2(lp3, lp4, 100)
+    addSegmentWithGroup2(lp4, lp1, 100)
 
     mi_addblocklabel((lp1[1] + lp3[1])/2, (lp1[2] + lp3[2])/2)
     mi_selectlabel((lp1[1] + lp3[1])/2, (lp1[2] + lp3[2])/2)
     -- if i is even then the windings are negative
     if i == 0 or i == 2 or i == 4 or i == 6 then
-        mi_setblockprop("FW", 1, 0, "Rotor", 0, 101, -rotorTurns)
+        mi_setblockprop("FW", 1, 0, "Rotor", 0, 100, -rotorTurns)
     else
-        mi_setblockprop("FW", 1, 0, "Rotor", 0, 101, rotorTurns)
+        mi_setblockprop("FW", 1, 0, "Rotor", 0, 100, rotorTurns)
     end
     mi_clearselected()
     
@@ -175,12 +175,12 @@ end
 -- add block labels
 mi_addblocklabel(0, 0)
 mi_selectlabel(0, 0)
-mi_setblockprop("Air", 1, 0, "<None>", 0, 101, 0)
+mi_setblockprop("Air", 1, 0, "<None>", 0, 100, 0)
 mi_clearselected()
 
 mi_addblocklabel(sin(pi/nYokes) * 0.5 * outerDiameter + 1 , cos(pi/nYokes) * 0.5 * outerDiameter + 1 )
 mi_selectlabel(sin(pi/nYokes) * 0.5 * outerDiameter + 1 , cos(pi/nYokes) * 0.5 * outerDiameter + 1 )
-mi_setblockprop("Air", 1, 0, "<None>", 0, 101, 0)
+mi_setblockprop("Air", 1, 0, "<None>", 0, 100, 0)
 mi_clearselected()
 
 mi_addblocklabel(0, innerDiameter + (((outerDiameter / 2) - (innerDiameter / 2))/2))
@@ -191,8 +191,8 @@ mi_clearselected()
 -- set current of Rotor circuit
 mi_modifycircprop("Rotor", 1, rotorCurrent)
 
--- save file as ./iterations/yokeBaseWidth/7/template.FEM
-mi_saveas("./iterations/yokeBaseWidth/7/template.FEM")
+-- save file as ./iterations/outerDiameter/35/template.FEM
+mi_saveas("./iterations/outerDiameter/35/template.FEM")
 
 -- close femm window
 quit()
