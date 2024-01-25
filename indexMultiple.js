@@ -18,6 +18,29 @@ const readJson = async () => {
 const generateLuaFile = async () => {
   const { parameters, iterate } = await readJson();
 
+  const calcOrder = JSON.stringify(
+    iterate.reduce((acc, curr) => {
+      let parameterCalcOrder = [];
+      for (let n = curr.beginAt; n <= curr.endAt; n += curr.step) {
+        parameterCalcOrder.push(`./iterations/${curr.parameter}/${n}`);
+      }
+      console.log(acc);
+      return [...acc, ...parameterCalcOrder];
+    }, []),
+    null,
+    2
+  );
+
+  console.log(calcOrder);
+
+  //save calcOrder to json file
+  fs.writeFile(`./calcOrder.json`, calcOrder, (err) => {
+    if (err) throw err;
+    console.log("calcOrder.json has been saved!");
+  });
+
+  await new Promise((resolve) => setTimeout(resolve, 10000));
+
   if (!fs.existsSync("./iterations")) {
     fs.mkdir("./iterations", (err) => {
       if (err) throw err;

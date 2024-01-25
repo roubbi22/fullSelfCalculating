@@ -19,14 +19,20 @@
     {
       "parameter": "innerDiameter",
       "beginAt": 2,
-      "endAt": 16,
-      "step": 2
+      "endAt": 18,
+      "step": 4
     },
     {
       "parameter": "outerDiameter",
       "beginAt": 25,
       "endAt": 35,
       "step": 2
+    },
+    {
+      "parameter": "yokeBaseWidth",
+      "beginAt": 5,
+      "endAt": 20,
+      "step": 5
     }
   ]
 }
