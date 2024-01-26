@@ -1,5 +1,13 @@
+node_modules
+
 *.FEM
 *.ans
 /iterations/*
 
 calcOrder.json
+
+*Temp.lua
+
+analysis/
+
+iterations_archive/

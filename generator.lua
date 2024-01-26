@@ -72,35 +72,47 @@ end
 
 -- create nodes for the yoke
 for i = 0, nYokes-1 do
+
     -- create the nodes for the right side of the yoke
     addNodeWithGroup2(transformPoint2(yokeBaseWidth/2, yokeBaseY, 2*i*pi/nYokes), 100)
-    addNodeWithGroup2(transformPoint2(yokeBaseWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes), 100)
-    addNodeWithGroup2(transformPoint2(yokeUpperWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes), 100)
+    -- addNodeWithGroup2(transformPoint2(yokeBaseWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes), 100)
+    -- addNodeWithGroup2(transformPoint2(yokeUpperWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes), 100)
+    addNodeWithGroup2(transformPoint2(yokeBaseWidth/2, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight, 2*i*pi/nYokes), 100)
+    addNodeWithGroup2(transformPoint2(yokeUpperWidth/2, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight, 2*i*pi/nYokes), 100)
     -- addNodeWithGroup2(transformPoint2(yokeUpperWidth/2, yokeBaseY + yokeBaseHeight + youkeUpperOuterHeight, 2*i*pi/nYokes), 100)
     addNodeWithGroup2(transformPoint2(yokeUpperWidth/2, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2), 2*i*pi/nYokes), 100)
+    
     -- create the nodes for the left side of the yoke
     addNodeWithGroup2(transformPoint2(-yokeBaseWidth/2, yokeBaseY, 2*i*pi/nYokes), 100)
-    addNodeWithGroup2(transformPoint2(-yokeBaseWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes), 100)
-    addNodeWithGroup2(transformPoint2(- yokeUpperWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes), 100)
+    -- addNodeWithGroup2(transformPoint2(-yokeBaseWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes), 100)
+    -- addNodeWithGroup2(transformPoint2(- yokeUpperWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes), 100)
+    addNodeWithGroup2(transformPoint2(-yokeBaseWidth/2, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight, 2*i*pi/nYokes), 100)
+    addNodeWithGroup2(transformPoint2(- yokeUpperWidth/2, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight, 2*i*pi/nYokes), 100)
     -- addNodeWithGroup2(transformPoint2(- yokeUpperWidth/2, yokeBaseY + yokeBaseHeight + youkeUpperOuterHeight, 2*i*pi/nYokes), 100)
     addNodeWithGroup2(transformPoint2(-yokeUpperWidth/2, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2), 2*i*pi/nYokes), 100)
 end
 
 -- connect the nodes for the yoke
 for i = 0, nYokes-1 do
+    
     -- connect the nodes for the right side of the yoke
     rp1 = transformPoint2(yokeBaseWidth/2, yokeBaseY, 2*i*pi/nYokes)
-    rp2 = transformPoint2(yokeBaseWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes)
-    rp3 = transformPoint2(yokeUpperWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes)
+    -- rp2 = transformPoint2(yokeBaseWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes)
+    -- rp3 = transformPoint2(yokeUpperWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes)
+    rp2 = transformPoint2(yokeBaseWidth/2, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight, 2*i*pi/nYokes)
+    rp3 = transformPoint2(yokeUpperWidth/2, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight, 2*i*pi/nYokes)
     -- rp4 = transformPoint2(yokeUpperWidth/2, yokeBaseY + yokeBaseHeight + youkeUpperOuterHeight, 2*i*pi/nYokes)
     rp4 = transformPoint2(yokeUpperWidth/2, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2), 2*i*pi/nYokes)
     addSegmentWithGroup2(rp1, rp2, 100)
     addSegmentWithGroup2(rp2, rp3, 100)
     addSegmentWithGroup2(rp3, rp4, 100)
+
     -- connect the nodes for the left side of the yoke
     lp1 = transformPoint2(-yokeBaseWidth/2, yokeBaseY, 2*i*pi/nYokes)
-    lp2 = transformPoint2(-yokeBaseWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes)
-    lp3 = transformPoint2(- yokeUpperWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes)
+    -- lp2 = transformPoint2(-yokeBaseWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes)
+    -- lp3 = transformPoint2(- yokeUpperWidth/2, yokeBaseY + yokeBaseHeight, 2*i*pi/nYokes)
+    lp2 = transformPoint2(-yokeBaseWidth/2, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight, 2*i*pi/nYokes)
+    lp3 = transformPoint2(- yokeUpperWidth/2, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight, 2*i*pi/nYokes)
     -- lp4 = transformPoint2(- yokeUpperWidth/2, yokeBaseY + yokeBaseHeight + youkeUpperOuterHeight, 2*i*pi/nYokes)
     lp4 = transformPoint2(-yokeUpperWidth/2, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2), 2*i*pi/nYokes)
     addSegmentWithGroup2(lp1, lp2, 100)
@@ -117,10 +129,10 @@ end
 -- create the field winding spaces
 for i = 0, nYokes-1 do
     -- create the nodes for the right side of the yoke
-    rp1 = transformPoint2(yokeBaseWidth/2 + padding, yokeBaseY + yokeBaseHeight - padding - FWHeight , 2*i*pi/nYokes)
-    rp2 = transformPoint2(yokeBaseWidth/2 + padding + FWWidth, yokeBaseY + yokeBaseHeight - padding - FWHeight , 2*i*pi/nYokes)
-    rp3 = transformPoint2(yokeBaseWidth/2 + padding + FWWidth, yokeBaseY + yokeBaseHeight - padding, 2*i*pi/nYokes)
-    rp4 = transformPoint2(yokeBaseWidth/2 + padding, yokeBaseY + yokeBaseHeight - padding, 2*i*pi/nYokes)
+    rp1 = transformPoint2(yokeBaseWidth/2 + padding, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight - padding - FWHeight , 2*i*pi/nYokes)
+    rp2 = transformPoint2(yokeBaseWidth/2 + padding + FWWidth, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight - padding - FWHeight , 2*i*pi/nYokes)
+    rp3 = transformPoint2(yokeBaseWidth/2 + padding + FWWidth, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight - padding, 2*i*pi/nYokes)
+    rp4 = transformPoint2(yokeBaseWidth/2 + padding, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight - padding, 2*i*pi/nYokes)
 
     addNodeWithGroup2(rp1, 100)
     addNodeWithGroup2(rp2, 100)
@@ -143,10 +155,10 @@ for i = 0, nYokes-1 do
     mi_clearselected()
 
     -- create the nodes for the left side of the yoke
-    lp1 = transformPoint2(-yokeBaseWidth/2 - padding, yokeBaseY + yokeBaseHeight - padding - FWHeight , 2*i*pi/nYokes)
-    lp2 = transformPoint2(-yokeBaseWidth/2 - padding - FWWidth, yokeBaseY + yokeBaseHeight - padding - FWHeight , 2*i*pi/nYokes)
-    lp3 = transformPoint2(-yokeBaseWidth/2 - padding - FWWidth, yokeBaseY + yokeBaseHeight - padding, 2*i*pi/nYokes)
-    lp4 = transformPoint2(-yokeBaseWidth/2 - padding, yokeBaseY + yokeBaseHeight - padding, 2*i*pi/nYokes)
+    lp1 = transformPoint2(-yokeBaseWidth/2 - padding, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight - padding - FWHeight , 2*i*pi/nYokes)
+    lp2 = transformPoint2(-yokeBaseWidth/2 - padding - FWWidth, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight - padding - FWHeight , 2*i*pi/nYokes)
+    lp3 = transformPoint2(-yokeBaseWidth/2 - padding - FWWidth, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight - padding, 2*i*pi/nYokes)
+    lp4 = transformPoint2(-yokeBaseWidth/2 - padding, sqrt((innerStatorRadius - airGap) ^ 2 - (yokeUpperWidth/2) ^ 2) - youkeUpperOuterHeight - padding, 2*i*pi/nYokes)
 
     addNodeWithGroup2(lp1, 100)
     addNodeWithGroup2(lp2, 100)

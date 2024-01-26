@@ -5,7 +5,7 @@
     "yokeBaseWidth": 9,
     "yokeBaseHeight": 15,
     "yokeUpperWidth": 32,
-    "youkeUpperOuterHeight": 4,
+    "youkeUpperOuterHeight": 5,
     "nYokes": 4,
     "FWWidth": 5,
     "FWHeight": 14,
@@ -17,22 +17,28 @@
   },
   "iterate": [
     {
-      "parameter": "innerDiameter",
-      "beginAt": 2,
-      "endAt": 18,
-      "step": 4
-    },
-    {
-      "parameter": "outerDiameter",
-      "beginAt": 25,
-      "endAt": 35,
+      "parameter": "yokeBaseWidth",
+      "beginAt": 5,
+      "endAt": 11,
       "step": 2
     },
     {
-      "parameter": "yokeBaseWidth",
-      "beginAt": 5,
-      "endAt": 20,
-      "step": 5
+      "parameter": "youkeUpperOuterHeight",
+      "beginAt": 4,
+      "endAt": 10,
+      "step": 3
+    },
+    {
+      "parameter": "rotorTurns",
+      "beginAt": 100,
+      "endAt": 200,
+      "step": 50
+    },
+    {
+      "parameter": "rotorCurrent",
+      "beginAt": 1,
+      "endAt": 9,
+      "step": 2
     }
   ]
 }

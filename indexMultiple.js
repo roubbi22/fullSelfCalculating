@@ -1,6 +1,7 @@
 const fs = require("fs");
 const genrateLuaContent = require("./functions/genrateLuaContent");
 const { exec } = require("child_process");
+const Excel = require("exceljs");
 
 const readJson = async () => {
   try {
@@ -39,7 +40,7 @@ const generateLuaFile = async () => {
     console.log("calcOrder.json has been saved!");
   });
 
-  await new Promise((resolve) => setTimeout(resolve, 10000));
+  // await new Promise((resolve) => setTimeout(resolve, 10000));
 
   if (!fs.existsSync("./iterations")) {
     fs.mkdir("./iterations", (err) => {
@@ -119,124 +120,259 @@ generateLuaFile()
   })
   .then(async () => {
     // iterate trough all folders in iterations
-    for (const parameter of fs.readdirSync("./iterations")) {
-      console.log(`\n\n ${parameter}: \n`);
-      for (const value of fs.readdirSync(`./iterations/${parameter}`)) {
-        if (value !== "densityplots") {
-          console.log(parameter, value);
-          // load generatorParams.lua as a string
-          const genratorLua = await fs.promises.readFile(
-            `./generator.lua`,
-            "utf8"
-          );
+    const calcOrder = JSON.parse(
+      await fs.promises.readFile("./calcOrder.json", "utf8")
+    );
 
-          console.log(`generating template.FEM for ${parameter} = ${value}...`);
-          // replace generatorParams.lua with the current iteration
-          const genratorLuaWithParams = genratorLua
-            .replace(
-              /generatorParams.lua/g,
-              `./iterations/${parameter}/${value}/generatorParams.lua`
-            )
-            .replace(
-              /template.FEM/g,
-              `./iterations/${parameter}/${value}/template.FEM`
-            );
-          // write the new generatorTemp.lua
-          fs.writeFile(`./generatorTemp.lua`, genratorLuaWithParams, (err) => {
-            if (err) throw err;
-          });
-          // open femm
-          exec(
-            `C:/femm42/bin/femm.exe -lua-script=./generatorTemp.lua`,
-            (err, stdout, stderr) => {
-              if (err) {
-                console.error(`exec error: ${err}`);
-                return;
-              }
-            }
-          );
+    let currentParameter = "";
 
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+    for (let i in calcOrder) {
+      const parameter = calcOrder[i].split("/")[2];
+      const value = calcOrder[i].split("/")[3];
+      if (calcOrder[i].split("/")[2] !== currentParameter) {
+        currentParameter = calcOrder[i].split("/")[2];
+        console.log(`\n\n ${currentParameter}: \n`);
+      }
 
-          let femmStillOpen = true;
-          while (femmStillOpen) {
-            exec(
-              `tasklist /FI "IMAGENAME eq femm.exe"`,
-              (err, stdout, stderr) => {
-                if (err) {
-                  console.error(`exec error: ${err}`);
-                  return;
-                }
-                if (stdout.includes("femm.exe")) {
-                  femmStillOpen = true;
-                } else {
-                  femmStillOpen = false;
-                }
-              }
-            );
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+      // load generatorParams.lua as a string
+      const genratorLua = await fs.promises.readFile(`./generator.lua`, "utf8");
+
+      console.log(`generating template.FEM for ${parameter} = ${value}...`);
+
+      // replace generatorParams.lua with the current iteration
+      const genratorLuaWithParams = genratorLua
+        .replace(
+          /generatorParams.lua/g,
+          `./iterations/${parameter}/${value}/generatorParams.lua`
+        )
+        .replace(
+          /template.FEM/g,
+          `./iterations/${parameter}/${value}/template.FEM`
+        );
+
+      // write the new generatorTemp.lua
+      fs.writeFile(`./generatorTemp.lua`, genratorLuaWithParams, (err) => {
+        if (err) throw err;
+      });
+
+      // open femm
+      exec(
+        `C:/femm42/bin/femm.exe -lua-script=./generatorTemp.lua`,
+        (err, stdout, stderr) => {
+          if (err) {
+            console.error(`exec error: ${err}`);
+            return;
           }
         }
+      );
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      let femmStillOpen = true;
+      while (femmStillOpen) {
+        exec(`tasklist /FI "IMAGENAME eq femm.exe"`, (err, stdout, stderr) => {
+          if (err) {
+            console.error(`exec error: ${err}`);
+            return;
+          }
+          if (stdout.includes("femm.exe")) {
+            femmStillOpen = true;
+          } else {
+            femmStillOpen = false;
+          }
+        });
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     }
   })
   .then(async () => {
-    for (const parameter of fs.readdirSync("./iterations")) {
-      for (const value of fs.readdirSync(`./iterations/${parameter}`)) {
-        if (value !== "densityplots") {
-          const genratorLua = await fs.promises.readFile(
-            `./magFluxPicture.lua`,
-            "utf8"
-          );
-          // replace generatorParams.lua with the current iteration
-          const genratorLuaWithParams = genratorLua
-            .replace(/root/g, `./iterations/${parameter}`)
-            .replace(/parameterValue/g, `${value}`);
-          // write the new generatorTemp.lua
-          fs.writeFile(
-            `./magFluxPictureTemp.lua`,
-            genratorLuaWithParams,
-            (err) => {
-              if (err) throw err;
-              console.log("Lua file has been saved!");
-            }
-          );
+    const calcOrder = JSON.parse(
+      await fs.promises.readFile("./calcOrder.json", "utf8")
+    );
 
-          console.log(
-            `generating flux density plot for ${parameter} = ${value}....`
-          );
+    let currentParameter = "";
 
-          exec(
-            `C:/femm42/bin/femm.exe -lua-script=./magFluxPictureTemp.lua`,
-            (err, stdout, stderr) => {
-              if (err) {
-                console.error(`exec error: ${err}`);
-                return;
-              }
-            }
-          );
+    for (let i in calcOrder) {
+      const parameter = calcOrder[i].split("/")[2];
+      const value = calcOrder[i].split("/")[3];
+      if (calcOrder[i].split("/")[2] !== currentParameter) {
+        currentParameter = calcOrder[i].split("/")[2];
+        console.log(`\n\n ${currentParameter}: \n`);
+      }
 
-          await new Promise((resolve) => setTimeout(resolve, 1000));
+      const genratorLua = await fs.promises.readFile(
+        `./magFluxPicture.lua`,
+        "utf8"
+      );
+      // replace generatorParams.lua with the current iteration
+      const genratorLuaWithParams = genratorLua
+        .replace(/root/g, `./iterations/${parameter}`)
+        .replace(/parameterValue/g, `${value}`);
+      // write the new generatorTemp.lua
+      fs.writeFile(`./magFluxPictureTemp.lua`, genratorLuaWithParams, (err) => {
+        if (err) throw err;
+        console.log("Lua file has been saved!");
+      });
 
-          let femmStillOpen = true;
-          while (femmStillOpen) {
-            exec(
-              `tasklist /FI "IMAGENAME eq femm.exe"`,
-              (err, stdout, stderr) => {
-                if (err) {
-                  console.error(`exec error: ${err}`);
-                  return;
-                }
-                if (stdout.includes("femm.exe")) {
-                  femmStillOpen = true;
-                } else {
-                  femmStillOpen = false;
-                }
-              }
-            );
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log(
+        `generating flux density plot for ${parameter} = ${value}....`
+      );
+
+      exec(
+        `C:/femm42/bin/femm.exe -lua-script=./magFluxPictureTemp.lua`,
+        (err, stdout, stderr) => {
+          if (err) {
+            console.error(`exec error: ${err}`);
+            return;
           }
         }
+      );
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      let femmStillOpen = true;
+      while (femmStillOpen) {
+        exec(`tasklist /FI "IMAGENAME eq femm.exe"`, (err, stdout, stderr) => {
+          if (err) {
+            console.error(`exec error: ${err}`);
+            return;
+          }
+          if (stdout.includes("femm.exe")) {
+            femmStillOpen = true;
+          } else {
+            femmStillOpen = false;
+          }
+        });
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
+    }
+  })
+  .then(async () => {
+    console.log(
+      `\n\n*****************\nRunning analysis\n\n*****************\n`
+    );
+
+    const calcOrder = JSON.parse(
+      await fs.promises.readFile("./calcOrder.json", "utf8")
+    );
+
+    let currentParameter = "";
+
+    for (let i in calcOrder) {
+      const parameter = calcOrder[i].split("/")[2];
+      const value = calcOrder[i].split("/")[3];
+      if (calcOrder[i].split("/")[2] !== currentParameter) {
+        currentParameter = calcOrder[i].split("/")[2];
+        console.log(`\n\n ${currentParameter}: \n`);
+      }
+
+      // copy the template.FEM to ./analysis directory
+      fs.copyFile(
+        `./iterations/${parameter}/${value}/template.FEM`,
+        `./analysis/template.FEM`,
+        (err) => {
+          if (err) throw err;
+        }
+      );
+
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      // change directory to ./analysis
+      process.chdir("./analysis");
+
+      console.log(`running analysis for ${parameter} = ${value}....`);
+
+      // run femm with lua script
+      exec(
+        `C:/femm42/bin/femm.exe -lua-script=./calc.lua -windowhide 1>msg.txt 2>&1`,
+        (err, stdout, stderr) => {
+          if (err) {
+            console.error(`exec error: ${err}`);
+            return;
+          }
+        }
+      );
+
+      let femmStillOpen = true;
+      while (femmStillOpen) {
+        exec(`tasklist /FI "IMAGENAME eq femm.exe"`, (err, stdout, stderr) => {
+          if (err) {
+            console.error(`exec error: ${err}`);
+            return;
+          }
+          if (stdout.includes("femm.exe")) {
+            femmStillOpen = true;
+          } else {
+            femmStillOpen = false;
+          }
+        });
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+
+      process.chdir("C:/Users/Robin/Desktop/EM/fullSelfCalculating");
+
+      // copy the result csv files to ./iterations/${parameter}/${value}/
+      fs.copyFile(
+        `./analysis/F_ump_amp.csv`,
+        `./iterations/${parameter}/${value}/F_ump_amp.csv`,
+        (err) => {
+          if (err) throw err;
+        }
+      );
+      fs.copyFile(
+        `./analysis/F_ump_phase.csv`,
+        `./iterations/${parameter}/${value}/F_ump_phase.csv`,
+        (err) => {
+          if (err) throw err;
+        }
+      );
+      fs.copyFile(
+        `./analysis/k_e_a.csv`,
+        `./iterations/${parameter}/${value}/k_e_a.csv`,
+        (err) => {
+          if (err) throw err;
+        }
+      );
+      fs.copyFile(
+        `./analysis/k_e_LL.csv`,
+        `./iterations/${parameter}/${value}/k_e_LL.csv`,
+        (err) => {
+          if (err) throw err;
+        }
+      );
+      fs.copyFile(
+        `./analysis/M_el.csv`,
+        `./iterations/${parameter}/${value}/M_el.csv`,
+        (err) => {
+          if (err) throw err;
+        }
+      );
+      fs.copyFile(
+        `./analysis/Psi_a.csv`,
+        `./iterations/${parameter}/${value}/Psi_a.csv`,
+        (err) => {
+          if (err) throw err;
+        }
+      );
+
+      exec("conda activate copy_to_vis && python copyToVis.py", async (err) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // change directory to root
+        process.chdir("C:/Users/Robin/Desktop/EM/fullSelfCalculating");
+
+        fs.copyFile(
+          `./analysis/Visualisation.xlsx`,
+          `./iterations/${parameter}/${value}/Visualisation.xlsx`,
+          (err) => {
+            if (err) throw err;
+          }
+        );
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      });
     }
   });
