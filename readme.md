@@ -13,8 +13,8 @@ This project is part of our approach to design a rotor with salient poles for a 
       - [node.js and npm](#nodejs-and-npm)
       - [File structure](#file-structure)
   - [Usage](#usage)
-      - [prepare the the FEMM empty stator file](#prepare-the-the-femm-empty-stator-file)
-      - [defining the parameters for the iterations](#defining-the-parameters-for-the-iterations)
+    - [prepare the the FEMM empty stator file](#prepare-the-the-femm-empty-stator-file)
+    - [defining the parameters for the iterations](#defining-the-parameters-for-the-iterations)
   - [Running the code](#running-the-code)
   - [Results](#results)
 
@@ -49,6 +49,7 @@ Afterwards you need to install the following packages:
 ```bash
 conda install -n copy_to_vis pandas
 conda install -n copy_to_vis openpyxl
+conda install -n matplotlib
 ```
 
 #### node.js and npm
@@ -99,9 +100,6 @@ To run the code you need to follow the following steps:
 
 Create the empty stator file from the given SPMSM design by deleting everything regarding the rotor. The empty space where the rotor will be generated needs to be empty so there must not be a material defined.
 Furthermore you need to define a mater curcuit called "Rotor" and define its attributes as needed - this will be the circuit for the rotor windings.
-The stator file should look like this:
-
-![empty stator file](./images/emptyfem.png)
 
 #### defining the parameters for the iterations
 
